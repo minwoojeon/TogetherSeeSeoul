@@ -24,7 +24,7 @@ public final class BackPressUtils {
             backKeyPressedTime = System.currentTimeMillis();
             // 현재시간을 다시 초기화
             toast = Toast.makeText(activity,
-                    "One more press \'Back\'button, close this application.",
+                    "한번더 뒤로가기를 누르시면 앱이 종료됩니다.",
                     Toast.LENGTH_SHORT);
             toast.show();
             activity.onBackPressed();

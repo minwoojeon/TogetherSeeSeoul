@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        custom:srcCompat="@color/colorMain" />
+        custom:srcCompat="@android:color/background_light" />
 
     <LinearLayout
         android:layout_width="match_parent"

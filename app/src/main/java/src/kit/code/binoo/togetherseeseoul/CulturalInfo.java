@@ -6,7 +6,7 @@ package src.kit.code.binoo.togetherseeseoul;
 
 import java.io.Serializable;
 
-public class CulturalInfo implements Serializable {
+public final class CulturalInfo implements Serializable {
     private String CULTCODE;
     private String SUBJCODE;
     private String CODENAME;
@@ -57,6 +57,62 @@ public class CulturalInfo implements Serializable {
         this.PLAYER = PLAYER;
         this.CONTENTS = CONTENTS;
         this.GCODE = GCODE;
+    }
+    public String toString(){
+        return this.CULTCODE+"|"+
+        this.SUBJCODE+"|"+
+        this.CODENAME+"|"+
+        this.TITLE+"|"+
+        this.STRTDATE+"|"+
+        this.END_DATE+"|"+
+        this.TIME+"|"+
+        this.PLACE+"|"+
+        this.ORG_LINK+"|"+
+        this.MAIN_IMG+"|"+
+        this.HOMEPAGE+"|"+
+        this.USE_TRGT+"|"+
+        this.USE_FEE+"|"+
+        this.SPONSOR+"|"+
+        this.INQUIRY+"|"+
+        this.SUPPORT+"|"+
+        this.ETC_DESC+"|"+
+        this.AGELIMIT+"|"+
+        this.IS_FREE+"|"+
+        this.TICKET+"|"+
+        this.PROGRAM +"|"+
+        this.PLAYER+"|"+
+        this.CONTENTS +"|"+
+        this.GCODE;
+    }
+    public static CulturalInfo makeCulturalInfo(String dataStream){
+        String[] datas = dataStream.split("\\|");
+        if (datas.length == 24)
+            return new CulturalInfo(datas[0],
+                datas[1],
+                datas[2],
+                datas[3],
+                datas[4],
+                datas[5],
+                datas[6],
+                datas[7],
+                datas[8],
+                datas[9],
+                datas[10],
+                datas[11],
+                datas[12],
+                datas[13],
+                datas[14],
+                datas[15],
+                datas[16],
+                datas[17],
+                datas[18],
+                datas[19],
+                datas[20],
+                datas[21],
+                datas[22],
+                datas[23]);
+        else
+            return null;
     }
 
     public String getCULTCODE() {

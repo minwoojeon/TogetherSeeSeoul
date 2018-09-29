@@ -13,12 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import kr.go.seoul.culturalevents.Common.CulturalInfo;
 import kr.go.seoul.culturalevents.R.drawable;
 import kr.go.seoul.culturalevents.R.id;
 
@@ -58,7 +55,8 @@ public final class CulturalEventDetail extends Fragment implements MainActivity.
             this.culturalSponsor = (TextView)view.findViewById(id.cultural_sponsor);
             this.culturalInquiry = (TextView)view.findViewById(id.cultural_inquiry);
             if (this.culturalInfo == null) {
-                // TODO : 에러처리
+                ActivitiesManager.getInstance().getCurActivity().
+                        getSupportFragmentManager().beginTransaction().replace(R.id.mainLinear, ActivitiesManager.getInstance().fragments.get("CulturalEventSearchTypeA"), "CulturalEventSearchTypeA").commit();
             }
             final TextView txtEventInfo = (TextView) view.findViewById(R.id.txtEventInfo);
 
@@ -78,8 +76,6 @@ public final class CulturalEventDetail extends Fragment implements MainActivity.
             txtEventInfo.setOnTouchListener(onTouchListener);
 
             this.setData();
-
-            ActivitiesManager.getInstance().appData.put("url",this.culturalInfo.getORG_LINK());
         }
         return view;
     }
@@ -91,20 +87,21 @@ public final class CulturalEventDetail extends Fragment implements MainActivity.
 
     private void setData() {
         String url = "";
-        String[] mainImgUrl = this.culturalInfo.getMAIN_IMG().split("\\/");
-
-        for(int i = 0; i < mainImgUrl.length; ++i) {
-            if (i != 0 && i != 1 && i != 2) {
-                if (i == mainImgUrl.length - 1) {
-                    url = url + mainImgUrl[i];
+        String[] mainImgUrl;
+        if (this.culturalInfo.getMAIN_IMG() != null){
+            mainImgUrl = this.culturalInfo.getMAIN_IMG().split("\\/");
+            for(int i = 0; i < mainImgUrl.length; ++i) {
+                if (i != 0 && i != 1 && i != 2) {
+                    if (i == mainImgUrl.length - 1) {
+                        url = url + mainImgUrl[i];
+                    } else {
+                        url = url + mainImgUrl[i] + "/";
+                    }
                 } else {
-                    url = url + mainImgUrl[i] + "/";
+                    url = url + mainImgUrl[i].toLowerCase() + "/";
                 }
-            } else {
-                url = url + mainImgUrl[i].toLowerCase() + "/";
             }
         }
-
         Glide.with(this).load(url).error(drawable.bg_bigimg).into(this.mainImg);
         this.culturalTitle.setText(this.culturalInfo.getTITLE());
         this.culturalCodeName.setText(this.culturalInfo.getCODENAME());
@@ -120,12 +117,19 @@ public final class CulturalEventDetail extends Fragment implements MainActivity.
 
         this.culturalSponsor.setText(this.culturalInfo.getSPONSOR());
         this.culturalInquiry.setText(this.culturalInfo.getINQUIRY());
+
+        String key = this.culturalInfo.getTITLE();
+        ActivitiesManager.getInstance().getFirebaseDatabseUtils().view(key);
+        ActivitiesManager.getInstance().isDetail = true;
+        ActivitiesManager.getInstance().appData.put("url",this.culturalInfo.getORG_LINK());
+        ActivitiesManager.getInstance().appData.put("title",key);
+        ActivitiesManager.getInstance().appData.put("vo",this.culturalInfo.toString());
     }
     @Override
     public void onBack() {
         MainActivity activity = (MainActivity)getActivity();
         activity.setOnBackPressedListener(null);
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainLinear, new CulturalEventSearchTypeA(), "CulturalEventSearchTypeA").commit();
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainLinear, ActivitiesManager.getInstance().fragments.get("CulturalEventSearchTypeA"), "CulturalEventSearchTypeA").commit();
     }
 
     @Override

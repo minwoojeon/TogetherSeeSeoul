@@ -7,6 +7,11 @@
         android:title="@string/title_dashboard" />
 
     <item
+        android:id="@+id/navigation_bbs"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/title_nns" />
+
+    <item
         android:id="@+id/navigation_notifications"
         android:icon="@android:drawable/ic_menu_share"
         android:title="@string/title_notifications" />

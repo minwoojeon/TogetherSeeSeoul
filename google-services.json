@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "477523354365",
+    "firebase_url": "https://studybinoo.firebaseio.com",
+    "project_id": "studybinoo",
+    "storage_bucket": "studybinoo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477523354365:android:e85202e70a108059",
+        "android_client_info": {
+          "package_name": "src.kit.code.binoo.togetherseeseoul"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477523354365-u13ptrm5898d6tn6qluhqp1bignomjl7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8twOvRqdx8TeQgnniba2YP7UbMzdAfUQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

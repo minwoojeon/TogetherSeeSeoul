@@ -40,12 +40,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import kr.go.seoul.culturalevents.Common.ConsertSubjectCatalogInfo;
-import kr.go.seoul.culturalevents.Common.CulturalInfo;
 import kr.go.seoul.culturalevents.Common.CustomProgressDialog;
 import kr.go.seoul.culturalevents.Common.FontUtils;
 
-import kr.go.seoul.culturalevents.R.id;
-import kr.go.seoul.culturalevents.R.layout;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -58,7 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CulturalEventSearchTypeA extends Fragment implements MainActivity.OnBackPressedListener{
+public final class CulturalEventSearchTypeA extends Fragment implements MainActivity.OnBackPressedListener{
     private String[] categoryName = new String[]{"명칭", "기간", "장르"};
     private ConsertSubjectCatalogInfo[] concertSubjectCatalogList;
     private String[] concertSubjectCatalogNameList;
@@ -69,7 +66,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     private LinearLayout btnNameLoadMore;
     private LinearLayout btnPeriodLoadMore;
     private LinearLayout btnSubCodeCatalogLoadMore;
-    private ArrayList<CulturalInfo> culturalInfoArrayList = new ArrayList();
+    private ArrayList<CulturalInfo> culturalInfoArrayList = new ArrayList<CulturalInfo> ();
     private CulturalListAdapterTypeA culturalListAdapter;
     private int startNo = -1;
     private int selectCategory = -1;
@@ -81,7 +78,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     private LayoutInflater inflater;
     private View thisView;
 
-    private String openAPIKey = "507442474f626f7431323376534c454b";
+    private String openAPIKey = ActivitiesManager.getInstance().getCurActivity().getResources().getString(R.string.api_key);
 
     public CulturalEventSearchTypeA() {
         ActivitiesManager.getInstance().appData.clear();
@@ -96,17 +93,16 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ActivitiesManager.getInstance().isDetail = false;
         View view = inflater.inflate(R.layout.cultural_event_search_type_a, container, false);
         if(view != null){
-            this.culturalListview = (ListView)view.findViewById(id.cultural_listview);
+            this.culturalListview = (ListView)view.findViewById(R.id.cultural_listview);
             // context ch
-            this.culturalListAdapter = new CulturalListAdapterTypeA(view.getContext(), layout.cultural_event_list_item_type_a, this.culturalInfoArrayList);
+            this.culturalListAdapter = new CulturalListAdapterTypeA(view.getContext(), R.layout.cultural_event_list_item_type_a, this.culturalInfoArrayList);
             this.culturalListview.setAdapter(this.culturalListAdapter);
             this.culturalListview.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    /*Intent intent = new Intent(CulturalEventSearchTypeA.this, CulturalEventDetail.class);
-                    intent.putExtra("CulturalInfo", (CulturalInfo)adapterView.getAdapter().getItem(i));*/
-                    CulturalEventDetail culturalEventDetail = new CulturalEventDetail();
+                    CulturalEventDetail culturalEventDetail = (CulturalEventDetail)ActivitiesManager.getInstance().fragments.get("CulturalEventDetail");
                     culturalEventDetail.setCulturalInfo((CulturalInfo)adapterView.getAdapter().getItem(i));
                     ActivitiesManager.getInstance().getCurActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.mainLinear, culturalEventDetail, "CulturalInfo").commit();
@@ -187,7 +183,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     }
 
     public void searchName(View view) {
-        this.searchKey = ((EditText)this.thisView.findViewById(id.search_concert_name)).getText().toString();
+        this.searchKey = ((EditText)this.thisView.findViewById(R.id.search_concert_name)).getText().toString();
         if (this.searchKey.length() != 0 && !this.searchKey.contains(" ")) {
             this.culturalInfoArrayList.clear();
             this.culturalListAdapter.notifyDataSetChanged();
@@ -201,7 +197,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
             if (this.btnNameLoadMore == null) {
                 LayoutInflater li = this.inflater;
-                this.btnNameLoadMore = (LinearLayout)li.inflate(layout.btn_load_more, (ViewGroup)null);
+                this.btnNameLoadMore = (LinearLayout)li.inflate(R.layout.btn_load_more, (ViewGroup)null);
                 FontUtils.getInstance(thisView.getContext()).setGlobalFont(this.btnNameLoadMore);
                 this.btnNameLoadMore.setOnClickListener(new OnClickListener() {
                     public void onClick(View view) {
@@ -247,8 +243,8 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     }
 
     public void searchPeriod(View view) {
-        this.startDate = ((TextView)this.thisView.findViewById(id.start_date)).getText().toString();
-        this.endDate = ((TextView)thisView.findViewById(id.end_date)).getText().toString();
+        this.startDate = ((TextView)this.thisView.findViewById(R.id.start_date)).getText().toString();
+        this.endDate = ((TextView)thisView.findViewById(R.id.end_date)).getText().toString();
         if (this.startDate.length() != 0 && this.endDate.length() != 0) {
             this.culturalInfoArrayList.clear();
             this.culturalListAdapter.notifyDataSetChanged();
@@ -262,13 +258,13 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
             if (this.btnPeriodLoadMore == null) {
                 LayoutInflater li = this.inflater;
-                this.btnPeriodLoadMore = (LinearLayout)li.inflate(layout.btn_load_more, (ViewGroup)null);
+                this.btnPeriodLoadMore = (LinearLayout)li.inflate(R.layout.btn_load_more, (ViewGroup)null);
                 FontUtils.getInstance(this.thisView.getContext()).setGlobalFont(this.btnPeriodLoadMore);
                 this.btnPeriodLoadMore.setOnClickListener(new OnClickListener() {
                     public void onClick(View view) {
-                        if (CulturalEventSearchTypeA.this.culturalListview.getCount() > 0) {
-                            CulturalEventSearchTypeA.this.showProgressDialog();
-                            (CulturalEventSearchTypeA.this.new ProcessNetworkSearchConcertPeriodThread()).execute(new String[]{CulturalEventSearchTypeA.this.startDate, CulturalEventSearchTypeA.this.endDate});
+                        if (culturalListview.getCount() > 0) {
+                            showProgressDialog();
+                            (new ProcessNetworkSearchConcertPeriodThread()).execute(new String[]{startDate, endDate});
                         }
 
                     }
@@ -296,7 +292,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
     public void showSubCodeCatalog(View view) {
         Builder alert_confirm = new Builder(this.thisView.getContext(), 3);
-        ((ImageView)this.thisView.findViewById(id.category_subcode_selector)).setSelected(true);
+        ((ImageView)this.thisView.findViewById(R.id.category_subcode_selector)).setSelected(true);
         alert_confirm.setSingleChoiceItems(this.concertSubjectCatalogNameList, this.selectedSubCodeCatalog, new android.content.DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 CulturalEventSearchTypeA.this.selectedSubCodeCatalog = whichButton;
@@ -311,14 +307,14 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
                     CulturalEventSearchTypeA.this.culturalInfoArrayList.clear();
                     CulturalEventSearchTypeA.this.culturalListAdapter.notifyDataSetChanged();
-                    ((TextView)thisView.findViewById(id.category_subcode_name)).setText(CulturalEventSearchTypeA.this.concertSubjectCatalogNameList[CulturalEventSearchTypeA.this.selectedSubCodeCatalog]);
+                    ((TextView)thisView.findViewById(R.id.category_subcode_name)).setText(CulturalEventSearchTypeA.this.concertSubjectCatalogNameList[CulturalEventSearchTypeA.this.selectedSubCodeCatalog]);
                     CulturalEventSearchTypeA.this.startNo = 1;
                     CulturalEventSearchTypeA.this.selectCatalog = CulturalEventSearchTypeA.this.selectedSubCodeCatalog;
                     CulturalEventSearchTypeA.this.showProgressDialog();
                     (CulturalEventSearchTypeA.this.new ProcessNetworkSearchPerformanceBySubjectThread()).execute(new String[]{CulturalEventSearchTypeA.this.concertSubjectCatalogList[CulturalEventSearchTypeA.this.selectedSubCodeCatalog].getCODE()});
                     if (CulturalEventSearchTypeA.this.btnSubCodeCatalogLoadMore == null) {
                         LayoutInflater li = inflater;
-                        CulturalEventSearchTypeA.this.btnSubCodeCatalogLoadMore = (LinearLayout)li.inflate(layout.btn_load_more, (ViewGroup)null);
+                        CulturalEventSearchTypeA.this.btnSubCodeCatalogLoadMore = (LinearLayout)li.inflate(R.layout.btn_load_more, (ViewGroup)null);
                         FontUtils.getInstance(thisView.getContext()).setGlobalFont(CulturalEventSearchTypeA.this.btnSubCodeCatalogLoadMore);
                         CulturalEventSearchTypeA.this.btnSubCodeCatalogLoadMore.setOnClickListener(new OnClickListener() {
                             public void onClick(View view) {
@@ -349,7 +345,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
         });
         this.alert.setOnDismissListener(new OnDismissListener() {
             public void onDismiss(DialogInterface dialogInterface) {
-                ((ImageView)thisView.findViewById(id.category_subcode_selector)).setSelected(false);
+                ((ImageView)thisView.findViewById(R.id.category_subcode_selector)).setSelected(false);
             }
         });
         this.alert.show();
@@ -357,7 +353,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
     public void showCategory(View view) {
         Builder alert_confirm = new Builder(thisView.getContext(), 3);
-        ((ImageView)thisView.findViewById(id.category_selector)).setSelected(true);
+        ((ImageView)thisView.findViewById(R.id.category_selector)).setSelected(true);
         alert_confirm.setSingleChoiceItems(this.categoryName, this.selectedCategory, new android.content.DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 CulturalEventSearchTypeA.this.selectedCategory = whichButton;
@@ -366,19 +362,19 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (CulturalEventSearchTypeA.this.selectCategory != CulturalEventSearchTypeA.this.selectedCategory) {
                     CulturalEventSearchTypeA.this.initCondition();
-                    ((TextView)thisView.findViewById(id.category)).setText(CulturalEventSearchTypeA.this.categoryName[CulturalEventSearchTypeA.this.selectedCategory]);
-                    thisView.findViewById(id.layout_category_0).setVisibility(View.INVISIBLE);
-                    thisView.findViewById(id.layout_category_1).setVisibility(View.INVISIBLE);
-                    thisView.findViewById(id.layout_category_2).setVisibility(View.INVISIBLE);// 8
+                    ((TextView)thisView.findViewById(R.id.category)).setText(CulturalEventSearchTypeA.this.categoryName[CulturalEventSearchTypeA.this.selectedCategory]);
+                    thisView.findViewById(R.id.layout_category_0).setVisibility(View.INVISIBLE);
+                    thisView.findViewById(R.id.layout_category_1).setVisibility(View.INVISIBLE);
+                    thisView.findViewById(R.id.layout_category_2).setVisibility(View.INVISIBLE);// 8
                     switch(CulturalEventSearchTypeA.this.selectedCategory) {
                         case 0:
-                            thisView.findViewById(id.layout_category_0).setVisibility(View.VISIBLE);
+                            thisView.findViewById(R.id.layout_category_0).setVisibility(View.VISIBLE);
                             break;
                         case 1:
-                            thisView.findViewById(id.layout_category_1).setVisibility(View.VISIBLE);
+                            thisView.findViewById(R.id.layout_category_1).setVisibility(View.VISIBLE);
                             break;
                         case 2:
-                            thisView.findViewById(id.layout_category_2).setVisibility(View.VISIBLE);
+                            thisView.findViewById(R.id.layout_category_2).setVisibility(View.VISIBLE);
                             showProgressDialog();
                             (new ProcessNetworkSearchConcertSubjectCatalogThread()).execute(new String[0]);
                     }
@@ -401,7 +397,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
         });
         this.alert.setOnDismissListener(new OnDismissListener() {
             public void onDismiss(DialogInterface dialogInterface) {
-                ((ImageView)thisView.findViewById(id.category_selector)).setSelected(false);
+                ((ImageView)thisView.findViewById(R.id.category_selector)).setSelected(false);
             }
         });
         this.alert.show();
@@ -411,7 +407,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
     private void initCondition() {
         this.startNo = 1;
         this.selectCatalog = -1;
-        ((TextView)thisView.findViewById(id.category_subcode_name)).setText("장르를 선택해 주세요.");
+        ((TextView)thisView.findViewById(R.id.category_subcode_name)).setText("장르를 선택해 주세요.");
         if (this.culturalInfoArrayList != null) {
             this.culturalInfoArrayList.clear();
         }
@@ -439,7 +435,7 @@ public class CulturalEventSearchTypeA extends Fragment implements MainActivity.O
 
     private void hideSoftKeyboard() {
         @SuppressLint("WrongConstant") InputMethodManager imm = (InputMethodManager)ActivitiesManager.getInstance().getCurActivity().getSystemService("input_method");
-        imm.hideSoftInputFromWindow(((EditText)thisView.findViewById(id.search_concert_name)).getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(((EditText)thisView.findViewById(R.id.search_concert_name)).getWindowToken(), 0);
     }
 
     public class ProcessNetworkSearchConcertDetailThread extends AsyncTask<String, Void, String> {

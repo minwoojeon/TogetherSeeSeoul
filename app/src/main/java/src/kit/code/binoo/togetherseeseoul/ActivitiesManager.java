@@ -1,6 +1,10 @@
 package src.kit.code.binoo.togetherseeseoul;
-
+/*
+ * 2018-09-29
+ * botbinoo@naver.com
+ * */
 import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
@@ -20,22 +24,29 @@ public final class ActivitiesManager {
     public AppCompatActivity getCurActivity(){
         return (activities.size() == 0 ? null : activities.get(activities.size()-1));
     }
+    public HashMap<String, Fragment> fragments = new HashMap<String, Fragment>();
     private AlertDialog.Builder alertbuilder = null;
     public void setAlertbuilder(AlertDialog.Builder alertbuilder){
         this.alertbuilder = alertbuilder;
     }
+    private FirebaseDatabseUtils firebaseDatabseUtils = new FirebaseDatabseUtils();
+
+    public FirebaseDatabseUtils getFirebaseDatabseUtils() {
+        return firebaseDatabseUtils;
+    }
+    public boolean isDetail = false;
 
     public AlertDialog.Builder makeAlert(String say){
         alertbuilder
                 .setMessage(say)
                 .setCancelable(false)
-                .setPositiveButton("Ok/Agree",
+                .setPositiveButton("확인",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                .setNegativeButton("No",
+                .setNegativeButton("취소",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -44,5 +55,5 @@ public final class ActivitiesManager {
                         });
         return alertbuilder;
     }
-    public HashMap<String,String> appData = new HashMap<String,String>();
+    public HashMap<String,Object> appData = new HashMap<String,Object>();
 }

@@ -4,6 +4,8 @@
 
     <string name="title_dashboard">문화행사</string>
     <string name="title_notifications">공유하기</string>
+    <string name="title_nns">공유기록</string>
+    <string name="api_key">507442474f626f7431323376534c454b</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

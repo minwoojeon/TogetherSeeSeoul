@@ -1,5 +1,8 @@
 package src.kit.code.binoo.togetherseeseoul;
-
+/*
+ * 2018-09-29
+ * botbinoo@naver.com
+ * */
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,21 +56,21 @@ public final class LoadingActivity extends AppCompatActivity {
                                 PackageManager.PERMISSION_GRANTED;
                         boolean writeable = ContextCompat.checkSelfPermission(ActivitiesManager.getInstance().getCurActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                                 PackageManager.PERMISSION_GRANTED;
+                        boolean readPhoneState = ContextCompat.checkSelfPermission(ActivitiesManager.getInstance().getCurActivity(), Manifest.permission.READ_PHONE_STATE) ==
+                                PackageManager.PERMISSION_GRANTED;
 
-                        // 읽기 권한이 없을경우 -> 읽기 권한 부여 -> 쓰기 권한 부여 -> 앱 실행
-                        // 쓰기 권한이 없을 경우 -> 쓰기 권한 부여 -> 앱 실행
-                        if ( readable && writeable ){
-                            // 둘 다 권한이 있는 경우.
+                        if ( readable && writeable && readPhoneState ){
+                            // 셋 다 권한이 있는 경우.
                             nextHandler.sendEmptyMessageDelayed(0, 300);
                         } else {
                             ActivitiesManager.getInstance().makeAlert( "권한이 필요해요!" )
-                                    .setPositiveButton("Ok/Agree",
+                                    .setPositiveButton("동의",
                                             new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     nextHandler.sendEmptyMessageDelayed(2, 300);
                                                 }
-                                            }).setNegativeButton("No",
+                                            }).setNegativeButton("앱 종료",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -82,7 +85,7 @@ public final class LoadingActivity extends AppCompatActivity {
                     }
                 } else if (msg.what == 2){
                     ActivityCompat.requestPermissions(ActivitiesManager.getInstance().getCurActivity(), new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE },
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE },
                             MY_PERMISSIONS_REQUEST_WR_CONTACTS);
                 }
             }
@@ -107,25 +110,18 @@ public final class LoadingActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_WR_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
                     nextHandler.sendEmptyMessageDelayed(0, 300);
-                } else {
                 }
                 return;
             }
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
     private class DataIninAsynk extends AsyncTask<Void, Void, Void>{
 
         final Context context;
-        private int progress = 0;
 
         public DataIninAsynk(){
             context = ActivitiesManager.getInstance().getCurActivity().getBaseContext();
@@ -162,7 +158,6 @@ public final class LoadingActivity extends AppCompatActivity {
         }
         @Override
         protected Void doInBackground(Void... voids) {
-
             return null;
         }
     }

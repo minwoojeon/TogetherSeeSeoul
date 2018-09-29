@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:background="#3a4659"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <LinearLayout
+                android:id="@+id/layout_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="23dp">
+
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="명칭"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/category_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:padding="2dp"
+                    android:src="@drawable/selector_btn_category" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_0"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_text_background"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/search_concert_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Search..."
+                    android:includeFontPadding="false"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#696f78"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/imgBtn1"
+                    android:background="@android:color/transparent"
+                    android:padding="7dp"
+                    android:src="@drawable/icon_search" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_1"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_text_background"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="5dp"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:gravity="center"
+                    android:text="~"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_text_background"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="5dp"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/imgBtn2"
+                    android:background="@android:color/transparent"
+                    android:padding="7dp"
+                    android:src="@drawable/icon_search" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_2"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/category_subcode_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:includeFontPadding="false"
+                    android:text="장르를 선택해 주세요."
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/category_subcode_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:padding="2dp"
+                    android:src="@drawable/selector_btn_category" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/cultural_listview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#dce0e6"
+            android:divider="@null" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="12dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/btn_top" />
+</RelativeLayout>
